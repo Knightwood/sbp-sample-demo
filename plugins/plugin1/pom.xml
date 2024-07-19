@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kiylx.sbp</groupId>
+        <artifactId>project_parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+
+    <groupId>com.kiylx.sbp</groupId>
+    <artifactId>plugin1</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>plugin1</name>
+    <packaging>jar</packaging>
+    <description>plugin1</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <kotlin.version>1.9.24</kotlin.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kiylx.sbp</groupId>
+            <artifactId>common-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+<!--            <scope>provided</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.pf4j</groupId>
+            <artifactId>pf4j</artifactId>
+            <version>3.8.0</version>
+<!--            <scope>provided</scope>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.laxture</groupId>
+            <artifactId>sbp-core</artifactId>
+            <version>2.7.14</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+<!--                    <annotationProcessors>-->
+<!--                        <annotationProcessor>org.pf4j.processor.ExtensionAnnotationProcessor</annotationProcessor>-->
+<!--                    </annotationProcessors>-->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <!--使用 artifactSet 中的includes ：仅打包指定依赖，排除所有未指定的依赖（依赖项及其传递依赖项）-->
+                    <artifactSet>
+                        <includes>
+                            <include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
+                        </includes>
+                    </artifactSet>
+                    <!-- 此处按需编写更具体的配置 -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- 和 package 阶段绑定 -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.kiylx.sbp.plugin1.AdminPluginStarter</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Plugin-Id>some.sbp.demo</Plugin-Id>
+                            <Plugin-Class>com.kiylx.sbp.plugin1.AdminPlugin</Plugin-Class>
+                            <Plugin-Version>0.0.1</Plugin-Version>
+                            <Plugin-Provider>kiylx</Plugin-Provider>
+                            <Plugin-Dependencies/>
+
+                            <build-time>${maven.build.timestamp}</build-time>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
