@@ -350,6 +350,7 @@ for (PluginGreeting register : registers) {
 可行的解决办法：
 需要在如下位置创建extensions.idx文件
 
+```
 插件module
 	  |--src
 		|--main
@@ -357,23 +358,29 @@ for (PluginGreeting register : registers) {
 			|--resource
 				|--META-INF
 					|--extensions.idx
+```
 
 extensions.idx文件写入内容
+
 ```
 com.kiylx.sbp.plugin1.AdminGreeting
 ```
-内容就是上面AdminGreeting类在打包后的class文件的全路径，需要注意的是，你的项目打包出来的class文件可能不是原文件名。
+
+内容其实是上面AdminGreeting类在打包后的class文件的全路径，需要注意的是，你的项目打包出来的class文件可能不是原文件名。
 
 比如在PF4J-spring的demo中，在打包出来的jar包中，找到extensions.idx文件，你会发现内容是这样的：
+
 ```
 org.pf4j.demo.welcome.WelcomePlugin$WelcomeGreeting
 ```
 
 或者这样的
+
 ```
 org.pf4j.demo.hello.HelloPlugin$HelloGreeting
 ```
-因为它打包出来后，他们的class文件就是HelloPlugin`$HelloGreeting.class` 和 `WelcomePlugin$WelcomeGreeting.class`
+
+因为它打包出来后，他们的class文件就是`HelloPlugin$HelloGreeting.class` 和 `WelcomePlugin$WelcomeGreeting.class`
 
 如何知道类的位置和名称：
 在开发模式下，使用`mvn clean compile`命令，然后去插件module文件夹的target/calsses文件夹下找到class文件
