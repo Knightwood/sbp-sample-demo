@@ -307,6 +307,7 @@ sbp:
 
 1. 确保在插件module中使用了maven-shade-plugin将所需要依赖都打包进去了
 2. 确保extensions.idx文件存在，且不是空白。具体看下面。
+
 #### 可以运行，但是在宿主module中，找不到扩展点
 
 首先你需要确保你使用了pf4j中的插件化功能
@@ -347,8 +348,24 @@ for (PluginGreeting register : registers) {
 因此pf4j不认为插件中的AdminGreeting类是扩展点，
 或者说pom没有配置好，pf4j的注解处理没有生成文件。
 
-可行的解决办法：
-需要在如下位置创建extensions.idx文件
+
+可行的几个解决办法：
+
+1. 在idea或Eclipse设置中启用注解处理
+2. 据pf4j文档中所说，添加注解处理（我尝试后没有成功，或许文档过时了？）
+```
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessors>
+                        <annotationProcessor>org.pf4j.processor.ExtensionAnnotationProcessor</annotationProcessor>-->
+                    </annotationProcessors>
+                </configuration>
+            </plugin>
+
+```
+3. 手动在如下位置创建extensions.idx文件
 
 ```
 插件module
@@ -402,6 +419,6 @@ org.pf4j.demo.hello.HelloPlugin$HelloGreeting
 >文档原文：
 >where to load jar libs, relative to plugin folder.
 
-看起来应该是在插件目录下建立这个文件夹，存放插件所需lib，但是似乎会把文件夹识别为插件而报错
+看起来应该是在插件目录下建立这个文件夹，存放插件所需lib，但是似乎会把文件夹识别为插件而报错。看来是我没理解。
 
 ---
