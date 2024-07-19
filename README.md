@@ -56,14 +56,14 @@ sbp      //工程文件夹
     |--pom //定义了一些plugin module可以共享的内容
     |    
     |--plugin1 //插件
-		|--pom 
+	  |--pom 
 ```
 
 
 ### 宿主
 
 首先，需要有一个module作为宿主，也就是选取你的可执行的spring boot工程、或者说承载业务逻辑的主module。
-在这个module中需要引入sbp依赖，同时，还需要引入api module作为依赖
+在这个module中需要引入`sbp-spring-boot-starter`依赖，同时，还需要引入api module作为依赖
 ```
 <dependency>  
     <groupId>org.laxture</groupId>  
@@ -129,12 +129,16 @@ spring:
 这个module用来创建一些公用的interface接口，其他的插件module可以实现这些接口，提供统一的行为。
 并且，宿主工程也需要引入此module。
 
-API module 中可以引入pf4j，这样，宿主和插件module都可以共享依赖：
+API module 也可以引入一些公共依赖：
+
+注意，引入pf4j时最好添加上`<scope>provided</scope>` 因此，你需要在宿主，api，插件等module都引入pf4j依赖。
+
 ```
 <dependency>  
     <groupId>org.pf4j</groupId>  
     <artifactId>pf4j</artifactId>  
-    <version>3.8.0</version>  
+    <version>3.8.0</version>
+    <scope>provided</scope>
 </dependency>  
 当然，也可以引入其他的一些公共依赖
 <dependency>  
@@ -145,7 +149,8 @@ API module 中可以引入pf4j，这样，宿主和插件module都可以共享�
 ```
 ### 插件 module
 
-除了需要引入上面的api module作为依赖之外，还需要引入：
+除了需要引入上面的api module作为依赖之外，还需要引入`sbp-core`依赖：
+
 ```
 <dependency>  
     <groupId>org.laxture</groupId>  
@@ -169,7 +174,8 @@ API module 中可以引入pf4j，这样，宿主和插件module都可以共享�
 
 ### 插件的配置
 
-可以在插件module中正常使用`application.yml`文件，但是不要配置请求路径，因为配置了也不会起作用
+可以在插件module中正常使用`application.yml`文件，但是不要配置请求路径，因为配置了也不会起作用。
+插件中的controller，访问时其地址也是基于宿主的baseurl的。
 
 如下代码不要写入`application.yml`文件
 ```
