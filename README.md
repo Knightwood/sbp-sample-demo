@@ -14,14 +14,15 @@ sbp:
 3.   `mvn clean compile` 命令，生成class文件。
 4.  使用idea上面的`run`按钮启动。
 
-测试，直接调用、浏览器访问那些controller中的接口即可，
+测试：
+你可以直接调用或者使用浏览器访问那些controller中的接口地址即可，
 比如
 ```
 
 //此请求调用了宿主controller中的方法，并在方法中调用了插件的方法
 http://localhost:8082/pf4j_demo/plugin/extensions/list
 
-//此请求直接调用了插件的controller方法
+//此请求直接调用了插件的controller方法，是的，插件中的接口地址依旧是基于宿主的。
 http://localhost:8082/pf4j_demo/admin2/profile
 ```
 
@@ -40,6 +41,7 @@ http://localhost:8082/pf4j_demo/admin2/profile
 | >= 3.x              | -SNAPSHOT   | 17+ | 'org.laxture:sbp-spring-boot-starter:-SNAPSHOT'                                                                                                                                                                         |
 
 # demo的项目结构：
+```
 
 sbp      //工程文件夹
   |--pom //工程的pom，引入了一些公用依赖，比如spring-boot的那些依赖
@@ -55,6 +57,8 @@ sbp      //工程文件夹
     |    
     |--plugin1 //插件
 		|--pom 
+```
+
 
 ### 宿主
 
